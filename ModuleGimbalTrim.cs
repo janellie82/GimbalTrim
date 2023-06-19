@@ -9,12 +9,12 @@ namespace ManualGimbalControl
         [KSPField(isPersistant = true)]
         public bool trimActive = false;
 
-        // The default gimbal limit is 15
-        [KSPField(isPersistant = true, guiActive = false, guiActiveEditor = false, guiName = "Gimbal X", groupName = "gimbalTrim", groupDisplayName = "Gimbal Trim", groupStartCollapsed = true)]
+        // A comfortable incrementalSpeed was found with trial-and-error
+        [KSPAxisField(isPersistant = true, incrementalSpeed = 6f, guiActive = false, guiActiveEditor = false, guiName = "Gimbal X", groupName = "gimbalTrim", groupDisplayName = "Gimbal Trim", groupStartCollapsed = true)]
         [UI_FloatRange(minValue = -15f, stepIncrement = 0.25f, maxValue = 15f, requireFullControl = true)]
         public float gimbalAngleX = 0f;
 
-        [KSPField(isPersistant = true, guiActive = false, guiActiveEditor = false, guiName = "Gimbal Y", groupName = "gimbalTrim", groupDisplayName = "Gimbal Trim", groupStartCollapsed = true)]
+        [KSPAxisField(isPersistant = true, incrementalSpeed = 6f, guiActive = false, guiActiveEditor = false, guiName = "Gimbal Y", groupName = "gimbalTrim", groupDisplayName = "Gimbal Trim", groupStartCollapsed = true)]
         [UI_FloatRange(minValue = -15f, stepIncrement = 0.25f, maxValue = 15f, requireFullControl = true)]
         public float gimbalAngleY = 0f;
 
@@ -43,23 +43,22 @@ namespace ManualGimbalControl
             }
 
             // Limit the maximum settable gimbal to its proper value
-            // For some reason the variable is separate for the editor and flight scenes, hence the ugliness
             gimbalRange = moduleGimbalInstance.gimbalRange;
+            ((BaseAxisField)Fields["gimbalAngleX"]).maxValue = ((BaseAxisField)Fields["gimbalAngleY"]).maxValue = gimbalRange;
+            ((BaseAxisField)Fields["gimbalAngleX"]).minValue = ((BaseAxisField)Fields["gimbalAngleY"]).minValue = - gimbalRange;
+
+            // For some reason the variable is separate for the editor and flight scenes, hence the ugliness
             if (state == StartState.Editor)
             {
-                ((UI_FloatRange)Fields["gimbalAngleX"].uiControlEditor).maxValue = gimbalRange;
-                ((UI_FloatRange)Fields["gimbalAngleY"].uiControlEditor).maxValue = gimbalRange;
+                ((UI_FloatRange)Fields["gimbalAngleX"].uiControlEditor).maxValue = ((UI_FloatRange)Fields["gimbalAngleY"].uiControlEditor).maxValue = gimbalRange;
 
-                ((UI_FloatRange)Fields["gimbalAngleX"].uiControlEditor).minValue = - gimbalRange;
-                ((UI_FloatRange)Fields["gimbalAngleY"].uiControlEditor).minValue = - gimbalRange;
+                ((UI_FloatRange)Fields["gimbalAngleX"].uiControlEditor).minValue = ((UI_FloatRange)Fields["gimbalAngleY"].uiControlEditor).minValue = - gimbalRange;
             }
             else
             {
-                ((UI_FloatRange)Fields["gimbalAngleX"].uiControlFlight).maxValue = gimbalRange;
-                ((UI_FloatRange)Fields["gimbalAngleY"].uiControlFlight).maxValue = gimbalRange;
+                ((UI_FloatRange)Fields["gimbalAngleX"].uiControlFlight).maxValue = ((UI_FloatRange)Fields["gimbalAngleY"].uiControlFlight).maxValue = gimbalRange;
 
-                ((UI_FloatRange)Fields["gimbalAngleX"].uiControlFlight).minValue = - gimbalRange;
-                ((UI_FloatRange)Fields["gimbalAngleY"].uiControlFlight).minValue = - gimbalRange;
+                ((UI_FloatRange)Fields["gimbalAngleX"].uiControlFlight).minValue = ((UI_FloatRange)Fields["gimbalAngleY"].uiControlFlight).minValue = -gimbalRange;
             }
 
             // Force disable gimbal trim because the game doesn't do it itself in the editor
