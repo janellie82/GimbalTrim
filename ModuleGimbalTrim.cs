@@ -66,6 +66,11 @@ namespace ManualGimbalControl
             {
                 DisableTrim(emptyParam);
             }
+            // Force enable gimbal trim because the game doesn't do it itself in the flight scene.....
+            else
+            {
+                EnableTrim(emptyParam);
+            }
         }
 
         public void FixedUpdate()
