@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using static FinePrint.ContractDefs;
 
 namespace ManualGimbalControl
 {
@@ -10,11 +9,11 @@ namespace ManualGimbalControl
         public bool trimActive = false;
 
         // A comfortable incrementalSpeed was found with trial-and-error
-        [KSPAxisField(isPersistant = true, incrementalSpeed = 6f, guiActive = false, guiActiveEditor = false, guiName = "Gimbal X", groupName = "gimbalTrim", groupDisplayName = "Gimbal Trim", groupStartCollapsed = true)]
+        [KSPAxisField(isPersistant = true, incrementalSpeed = 6f, guiActive = false, guiActiveEditor = false, guiName = "#GimbalTrim_GimbalXField", groupName = "gimbalTrim", groupDisplayName = "#GimbalTrim_CategoryName", groupStartCollapsed = true)]
         [UI_FloatRange(minValue = -15f, stepIncrement = 0.25f, maxValue = 15f, requireFullControl = true)]
         public float gimbalAngleX = 0f;
 
-        [KSPAxisField(isPersistant = true, incrementalSpeed = 6f, guiActive = false, guiActiveEditor = false, guiName = "Gimbal Y", groupName = "gimbalTrim", groupDisplayName = "Gimbal Trim", groupStartCollapsed = true)]
+        [KSPAxisField(isPersistant = true, incrementalSpeed = 6f, guiActive = false, guiActiveEditor = false, guiName = "#GimbalTrim_GimbalYField", groupName = "gimbalTrim", groupDisplayName = "#GimbalTrim_CategoryName", groupStartCollapsed = true)]
         [UI_FloatRange(minValue = -15f, stepIncrement = 0.25f, maxValue = 15f, requireFullControl = true)]
         public float gimbalAngleY = 0f;
 
@@ -26,7 +25,7 @@ namespace ManualGimbalControl
         private float gimbalRange;
         KSPActionParam emptyParam = new KSPActionParam(KSPActionGroup.None, KSPActionType.Toggle); // Some methods require (i think?) this argument even though this mod doesn't make use of it
 
-        [KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "Toggle Trim", groupName = "gimbalTrim", groupDisplayName = "Gimbal Trim", groupStartCollapsed = true)]
+        [KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "#GimbalTrim_ToggleTrim", groupName = "gimbalTrim", groupDisplayName = "#GimbalTrim_CategoryName", groupStartCollapsed = true)]
         public void ToggleTrimButton()
         {
             ToggleTrim(emptyParam);
